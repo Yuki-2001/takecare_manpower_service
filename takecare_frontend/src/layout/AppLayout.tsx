@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Icon } from '../components/Icon';
+import { CircleUserRound } from 'lucide-react';
 import { userApi } from '../features/auth/api/userApi';
 import { updateAuthenticatedUser, type AuthSession } from '../features/auth/session';
 import { Header } from './Header';
@@ -12,6 +12,7 @@ interface AppLayoutProps {
 
 export function AppLayout({ session }: AppLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sessionLoading, setSessionLoading] = useState(!session.user);
   const [sessionError, setSessionError] = useState('');
   const [retryCount, setRetryCount] = useState(0);
@@ -39,9 +40,19 @@ export function AppLayout({ session }: AppLayoutProps) {
 
   return (
     <div className="flex min-h-screen bg-[#f5f7fb]">
-      <Sidebar access={session.access} open={sidebarOpen} onNavigate={() => setSidebarOpen(false)} />
+      <Sidebar
+        access={session.access}
+        open={sidebarOpen}
+        collapsed={sidebarCollapsed}
+        onNavigate={() => setSidebarOpen(false)}
+        onToggleCollapsed={() => setSidebarCollapsed((collapsed) => !collapsed)}
+      />
       <div className="flex min-h-screen min-w-0 flex-1 flex-col">
-        <Header session={session} onMenuClick={() => setSidebarOpen((current) => !current)} />
+        <Header
+          session={session}
+          sidebarOpen={sidebarOpen}
+          onMenuClick={() => setSidebarOpen((current) => !current)}
+        />
         <main className="w-full flex-1 px-7 py-7 max-[900px]:px-5 max-[900px]:py-6 max-[620px]:px-3.5 max-[620px]:py-4">
           <div className="mx-auto w-full max-w-[1480px]">
             {!session.user && sessionLoading ? (
@@ -54,7 +65,7 @@ export function AppLayout({ session }: AppLayoutProps) {
             ) : !session.user && sessionError ? (
               <section className="mx-auto grid min-h-[320px] max-w-xl content-center justify-items-center rounded-2xl border border-rose-100 bg-white p-8 text-center shadow-sm">
                 <span className="mb-4 grid size-12 place-items-center rounded-2xl bg-rose-50 text-rose-700">
-                  <Icon name="user" size={21} />
+                  <CircleUserRound size={21} />
                 </span>
                 <h2 className="m-0 text-lg font-semibold text-slate-900">Workspace profile unavailable</h2>
                 <p className="mt-2 mb-5 text-sm leading-relaxed text-slate-500">{sessionError}</p>

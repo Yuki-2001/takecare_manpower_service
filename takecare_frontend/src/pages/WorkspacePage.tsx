@@ -1,30 +1,30 @@
+import { BriefcaseBusiness, Shield, Upload, UserRound, Users, type LucideIcon } from 'lucide-react';
 import { getAuthSession } from '../features/auth/session';
-import { Icon, type IconName } from '../components/Icon';
 
 interface WorkspacePageProps {
   section: string;
 }
 
-const pageContent: Record<string, { eyebrow: string; description: string; icon: IconName }> = {
+const pageContent: Record<string, { eyebrow: string; description: string; icon: LucideIcon }> = {
   'User management': {
     eyebrow: 'ADMIN CONTROL',
     description: 'Manage workspace users and their access to TakeCare.',
-    icon: 'users',
+    icon: Users,
   },
   'Candidate upload': {
     eyebrow: 'ADMIN CONTROL',
     description: 'Prepare candidate information for your recruitment pipeline.',
-    icon: 'upload',
+    icon: Upload,
   },
   'Access unavailable': {
     eyebrow: 'PERMISSIONS',
     description: 'Your account does not currently have access to this section.',
-    icon: 'shield',
+    icon: Shield,
   },
   'No workspace modules available': {
     eyebrow: 'WORKSPACE',
-    description: 'No sections are assigned to your account yet. Contact your administrator for access.',
-    icon: 'briefcase',
+    description: 'No sections are assigned to your account yet.',
+    icon: BriefcaseBusiness,
   },
 };
 
@@ -34,32 +34,27 @@ export function WorkspacePage({ section }: WorkspacePageProps) {
   const page = pageContent[section] ?? {
     eyebrow: 'TAKECARE WORKSPACE',
     description: 'Review your account details and workspace access.',
-    icon: 'user' as const,
+    icon: UserRound,
   };
+  const PageIcon = page.icon;
   const access = session?.access ?? [];
   const roles = session?.user?.roles ?? [];
 
   return (
     <div className="space-y-5">
-      <header className="flex items-end justify-between gap-4 px-1 max-[620px]:items-start max-[620px]:flex-col">
-        <div>
-          <p className="m-0 text-[.66rem] font-bold tracking-[.15em] text-[#9a742e] uppercase">
-            {isProfile ? 'ACCOUNT' : page.eyebrow}
-          </p>
-          <h2 className="mt-1.5 mb-1 text-[1.45rem] font-semibold tracking-[-.035em] text-slate-900">
-            {section}
-          </h2>
-          <p className="m-0 text-sm text-slate-500">
-            {isProfile ? 'Your TakeCare workspace identity and permissions.' : page.description}
-          </p>
-        </div>
-        {isProfile && (
+      {isProfile && (
+        <header className="flex items-end justify-between gap-4 px-1 max-[620px]:items-start max-[620px]:flex-col">
+          <div>
+            <p className="m-0 text-[.66rem] font-bold tracking-[.15em] text-[#9a742e] uppercase">ACCOUNT</p>
+            <h2 className="mt-1.5 mb-1 text-[1.45rem] font-semibold tracking-[-.035em] text-slate-900">{section}</h2>
+            <p className="m-0 text-sm text-slate-500">Your TakeCare workspace identity and permissions.</p>
+          </div>
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
             <span className="size-1.5 rounded-full bg-emerald-500" />
             {session?.user?.status ?? 'Active'}
           </span>
-        )}
-      </header>
+        </header>
+      )}
 
       {isProfile ? (
         <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_8px_30px_rgba(28,39,67,0.04)]">
@@ -94,7 +89,7 @@ export function WorkspacePage({ section }: WorkspacePageProps) {
       ) : (
         <section className="grid min-h-[320px] content-center justify-items-center rounded-2xl border border-slate-200 bg-white px-6 py-12 text-center shadow-[0_8px_30px_rgba(28,39,67,0.04)]">
           <span className="mb-5 grid size-14 place-items-center rounded-2xl bg-[#eef1fb] text-[#344995]">
-            <Icon name={page.icon} size={24} />
+            <PageIcon size={24} />
           </span>
           <p className="m-0 text-[.65rem] font-bold tracking-[.16em] text-[#9a742e] uppercase">{page.eyebrow}</p>
           <h3 className="mt-2 mb-2 text-lg font-semibold tracking-[-.02em] text-slate-900">{section}</h3>

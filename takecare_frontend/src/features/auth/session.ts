@@ -10,7 +10,13 @@ export interface AuthenticatedUser {
   userEmail?: string | null;
   access?: string[] | null;
   profileImg?: string | null;
+  designationIdPk?: string | null;
   designationName?: string | null;
+  dailyHours?: number | null;
+  userDob?: string | null;
+  userDoj?: string | null;
+  userDor?: string | null;
+  search?: string | null;
   status?: string | null;
   roles?: {
     roleIdPk?: number | null;
