@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export type IconName = 'users' | 'shield' | 'briefcase' | 'search' | 'user' | 'chevron' | 'logout' | 'menu' | 'close';
+export type IconName = 'users' | 'shield' | 'briefcase' | 'search' | 'user' | 'upload' | 'chevron' | 'logout' | 'menu' | 'close' | 'home';
 
 const iconContent: Record<IconName, ReactNode> = {
   users: (
@@ -34,6 +34,12 @@ const iconContent: Record<IconName, ReactNode> = {
       <path d="M5 21a7 7 0 0 1 14 0" />
     </>
   ),
+  upload: (
+    <>
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="m17 8-5-5-5 5M12 3v12" />
+    </>
+  ),
   chevron: <path d="m9 18 6-6-6-6" />,
   logout: (
     <>
@@ -43,6 +49,12 @@ const iconContent: Record<IconName, ReactNode> = {
   ),
   menu: <path d="M4 6h16M4 12h16M4 18h16" />,
   close: <path d="m18 6-12 12M6 6l12 12" />,
+  home: (
+    <>
+      <path d="m3 10 9-7 9 7" />
+      <path d="M5 9v11h14V9M9 20v-6h6v6" />
+    </>
+  ),
 };
 
 interface IconProps {

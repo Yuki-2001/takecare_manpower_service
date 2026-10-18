@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { authApi } from '../api/authApi';
+import { userApi } from '../api/userApi';
 import { AuthFeedback } from '../components/AuthFeedback';
 import { AuthField } from '../components/AuthField';
 import { AuthPageHeading } from '../components/AuthPageHeading';
-import { saveAuthSession } from '../session';
+import { clearAuthSession, saveAuthSession, updateAuthenticatedUser } from '../session';
 
 interface LocationState {
   logoutMessage?: string;
@@ -27,8 +28,11 @@ export function LoginPage() {
     try {
       const session = await authApi.login({ userEmail: email.trim(), password });
       saveAuthSession(session);
+      const user = await userApi.getSession();
+      updateAuthenticatedUser(user);
       navigate('/app', { replace: true });
     } catch (requestError) {
+      clearAuthSession();
       setError(requestError instanceof Error ? requestError.message : 'Unable to sign in. Please try again.');
     } finally {
       setBusy(false);

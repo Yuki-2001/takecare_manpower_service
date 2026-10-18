@@ -1,71 +1,82 @@
 import { NavLink } from 'react-router-dom';
-import { Icon, type IconName } from '../components/Icon';
-
-interface MenuLink {
-  label: string;
-  to: string;
-  icon: IconName;
-}
+import { getVisibleMenuSections } from '../config/menuConfig';
+import { Icon } from '../components/Icon';
 
 interface SidebarProps {
+  access: string[];
   open: boolean;
   onNavigate: () => void;
 }
 
-const menuSections: { title: string; links: MenuLink[] }[] = [
-  {
-    title: 'User',
-    links: [{ label: 'My profile', to: '/app/profile', icon: 'user' }],
-  },
-  {
-    title: 'Admin Control',
-    links: [{ label: 'Access management', to: '/app/admin', icon: 'shield' }],
-  },
-  {
-    title: 'HR Control',
-    links: [{ label: 'Candidate search', to: '/app/candidates', icon: 'briefcase' }],
-  },
-];
+export function Sidebar({ access, open, onNavigate }: SidebarProps) {
+  const sections = getVisibleMenuSections(access);
 
-export function Sidebar({ open, onNavigate }: SidebarProps) {
   return (
     <>
-      {open && <button className="fixed inset-0 z-[19] border-0 bg-[rgba(17,25,44,0.34)] min-[901px]:hidden" aria-label="Close navigation" onClick={onNavigate} />}
-      <aside className={`sticky top-0 flex h-screen w-[264px] flex-[0_0_264px] flex-col border-r border-[#e8ebf1] bg-white px-4 pt-[29px] pb-[18px] max-[900px]:fixed max-[900px]:z-20 max-[900px]:left-0 max-[900px]:shadow-[15px_0_35px_rgba(25,36,62,0.08)] max-[900px]:transition-transform ${
-        open ? 'max-[900px]:translate-x-0' : 'max-[900px]:-translate-x-[102%]'
-      }`}>
-        <div className="mt-1 mx-[10px] mb-[26px]">
-          <span className="m-0 text-[.62rem] font-bold tracking-[.17em] text-[#a0a8b7] uppercase">WORKSPACE</span>
-          <p className="mt-2 mb-0 text-[.8rem] text-[#768096]">Manage your people and operations.</p>
+      {open && (
+        <button
+          className="fixed inset-0 z-30 border-0 bg-slate-950/40 backdrop-blur-[2px] min-[901px]:hidden"
+          aria-label="Close navigation"
+          onClick={onNavigate}
+        />
+      )}
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 flex w-[264px] flex-col border-r border-slate-200/80 bg-white px-4 py-5 shadow-[0_18px_55px_rgba(23,35,63,0.08)] transition-transform duration-200 min-[901px]:sticky min-[901px]:z-10 min-[901px]:h-screen min-[901px]:translate-x-0 min-[901px]:shadow-none ${
+          open ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="mb-8 rounded-2xl bg-gradient-to-br from-[#f4f6ff] to-white px-4 py-4">
+          <div className="mb-2 flex items-center gap-2 text-[.65rem] font-bold tracking-[.15em] text-[#6673a8] uppercase">
+            <span className="size-1.5 rounded-full bg-emerald-500" />
+            TakeCare workspace
+          </div>
+          <p className="m-0 text-[.78rem] leading-relaxed text-slate-500">
+            Your people operations, organized in one place.
+          </p>
         </div>
-        <nav aria-label="Main navigation">
-          {menuSections.map((section) => (
-            <div className="mb-[22px]" key={section.title}>
-              <h2 className="mt-0 mx-[10px] mb-2 text-[.69rem] font-bold tracking-[.035em] text-[#8992a3]">{section.title}</h2>
-              {section.links.map((link) => (
-                <NavLink
-                  className={({ isActive }) => `flex min-h-[43px] items-center gap-[11px] rounded-[9px] px-[10px] text-[.83rem] no-underline transition-colors duration-150 [&_svg:last-child]:ml-auto [&_svg:last-child]:text-[#aab1be] ${
-                    isActive
-                      ? 'bg-[#eef1fb] font-semibold text-[#273985] [&_svg:first-child]:text-[#334aa8]'
-                      : 'font-medium text-[#606b81] hover:bg-[#f5f6fb] hover:text-[#263982]'
-                  }`}
-                  to={link.to}
-                  key={link.to}
-                  onClick={onNavigate}
-                >
-                  <Icon name={link.icon} />
-                  <span>{link.label}</span>
-                  <Icon name="chevron" size={15} />
-                </NavLink>
-              ))}
-            </div>
+
+        <nav className="space-y-7" aria-label="Main navigation">
+          {sections.map((section) => (
+            <section key={section.title} aria-label={section.title}>
+              <div className="mb-2 flex items-center gap-2 px-2 text-[.67rem] font-bold tracking-[.12em] text-slate-400 uppercase">
+                <Icon name={section.icon} size={15} />
+                {section.title}
+              </div>
+              <div className="space-y-1">
+                {section.links.map((link) => (
+                  <NavLink
+                    className={({ isActive }) =>
+                      `group relative flex min-h-11 items-center gap-3 rounded-xl px-3 text-[.83rem] no-underline transition-colors ${
+                        isActive
+                          ? 'bg-[#eef1fb] font-semibold text-[#263b8f] shadow-[inset_0_0_0_1px_rgba(45,65,153,0.07)]'
+                          : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                      }`
+                    }
+                    to={link.to}
+                    key={link.to}
+                    onClick={onNavigate}
+                  >
+                    <span className="grid size-8 place-items-center rounded-lg bg-white text-slate-500 shadow-[0_1px_3px_rgba(15,23,42,0.08)] group-hover:text-[#354a9a]">
+                      <Icon name={link.icon} size={17} />
+                    </span>
+                    <span className="flex-1">{link.label}</span>
+                    <Icon name="chevron" size={15} />
+                  </NavLink>
+                ))}
+              </div>
+            </section>
           ))}
         </nav>
-        <div className="mt-auto flex items-center gap-[11px] rounded-xl border border-[#edf0f4] bg-[#fafbfc] px-[10px] py-[13px]">
-          <span className="grid size-[34px] flex-none place-items-center rounded-[10px] bg-[#283b8e] text-[.78rem] font-bold tracking-[-.07em] text-white">tc</span>
-          <div className="text-[.72rem]">
-            <strong className="block font-semibold text-[#303b53]">Need a hand?</strong>
-            <span className="mt-[3px] block text-[#778197]">Contact your administrator</span>
+
+        <div className="mt-auto rounded-2xl border border-slate-200/80 bg-slate-50/80 p-3.5">
+          <div className="flex items-center gap-2.5">
+            <span className="grid size-9 place-items-center rounded-xl bg-[#263b8f] text-white">
+              <Icon name="users" size={17} />
+            </span>
+            <div className="min-w-0">
+              <p className="m-0 text-[.75rem] font-semibold text-slate-700">Need a hand?</p>
+              <p className="mt-0.5 mb-0 text-[.68rem] text-slate-500">Contact your administrator</p>
+            </div>
           </div>
         </div>
       </aside>
