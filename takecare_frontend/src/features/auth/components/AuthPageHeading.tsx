@@ -11,11 +11,11 @@ export function AuthPageHeading({
 }: AuthPageHeadingProps) {
   return (
     <div className="mb-2 text-center">
-      {/* <p className="m-0 text-xs font-bold tracking-[.16em] text-[#9a6b19] uppercase">
+      <p className="m-0 text-xs font-bold tracking-[.16em] text-[#9a6b19] uppercase">
         {eyebrow}
-      </p> */}
+      </p>
 
-      <h1 className="my-2 text-xl sm:text-3xl leading-[1.15] font-bold tracking-[-.045em] text-[#172344]">
+      <h1 className="mt-2 mb-2 text-xl leading-[1.15] font-bold tracking-[-.045em] text-[#172344] sm:text-3xl">
         {title}
       </h1>
 
