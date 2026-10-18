@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "app.ui.url",
+  "type": "java.lang.String",
+  "description": "A description for 'app.ui.url'"
+}]}
